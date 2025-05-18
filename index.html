@@ -5,41 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kannur Bus Timings</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Kannur Bus Timings</h1>
+        <header>
+            <h1><i class="fas fa-bus"></i> Kannur Bus Timings</h1>
+            <p>Find colorful bus schedules across Kannur district</p>
+        </header>
         
-        <div class="controls">
-            <select id="from">
-                <option value="">From...</option>
-                <option>Arivilanjapoyil</option>
-                <option>Udayagiri</option>
-                <option>Karthikapurm</option>
-                <option>Cherupuzha</option>
-                <option>Alakode</option>
-                <option>Taliparamba</option>
-                <option>Kannur</option>
-            </select>
+        <div class="search-panel">
+            <div class="search-box">
+                <i class="fas fa-map-marker-alt"></i>
+                <select id="from">
+                    <option value="">From...</option>
+                    <option>Arivilanjapoyil</option>
+                    <option>Udayagiri</option>
+                    <option>Karthikapurm</option>
+                    <option>Cherupuzha</option>
+                    <option>Alakode</option>
+                    <option>Taliparamba</option>
+                    <option>Kannur</option>
+                </select>
+            </div>
             
-            <select id="to">
-                <option value="">To...</option>
-                <option>Arivilanjapoyil</option>
-                <option>Udayagiri</option>
-                <option>Karthikapurm</option>
-                <option>Cherupuzha</option>
-                <option>Alakode</option>
-                <option>Taliparamba</option>
-                <option>Kannur</option>
-            </select>
+            <div class="search-box">
+                <i class="fas fa-flag-checkered"></i>
+                <select id="to">
+                    <option value="">To...</option>
+                    <option>Arivilanjapoyil</option>
+                    <option>Udayagiri</option>
+                    <option>Karthikapurm</option>
+                    <option>Cherupuzha</option>
+                    <option>Alakode</option>
+                    <option>Taliparamba</option>
+                    <option>Kannur</option>
+                </select>
+            </div>
             
-            <button id="search">Show Timings</button>
+            <button id="search">
+                <i class="fas fa-search"></i> Show Timings
+            </button>
         </div>
         
-        <div class="current-time">Current Time: <span id="time-display"></span></div>
+        <div class="time-display">
+            <div class="current-time">
+                <i class="fas fa-clock"></i>
+                <span id="time">00:00</span>
+                <span id="ampm">AM</span>
+            </div>
+        </div>
         
         <div id="results">
-            <p>Select locations to see bus timings</p>
+            <div class="welcome-message">
+                <i class="fas fa-compass"></i>
+                <p>Select your route to see colorful bus timings</p>
+            </div>
         </div>
     </div>
 
