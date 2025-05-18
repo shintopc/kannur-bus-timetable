@@ -229,3 +229,126 @@ button:hover {
         padding: 12px;
     }
 }
+
+
+/* ... (previous styles remain the same) ... */
+
+/* Footer Styles */
+footer {
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+    color: white;
+    padding: 30px 20px 0;
+    margin-top: 30px;
+    border-bottom: 5px solid var(--accent);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+}
+
+.footer-left {
+    flex: 1;
+    min-width: 250px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.logo i {
+    font-size: 2rem;
+    color: var(--accent);
+}
+
+.footer-left p {
+    opacity: 0.8;
+    line-height: 1.6;
+}
+
+.footer-right {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.made-by {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.made-by span {
+    display: block;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 5px;
+}
+
+.signature {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: white;
+    padding: 0 15px;
+    border-radius: 5px;
+    display: inline-block;
+    transform: rotate(-5deg);
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+}
+
+.social-links a {
+    color: white;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    color: var(--accent);
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    background: rgba(0,0,0,0.1);
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+    }
+    
+    .footer-right {
+        align-items: flex-start;
+    }
+    
+    .made-by {
+        text-align: left;
+    }
+}
+
+/* Add this to your existing media queries */
+@media (max-width: 600px) {
+    .signature {
+        font-size: 1.5rem;
+    }
+}
