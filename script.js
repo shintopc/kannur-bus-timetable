@@ -1,44 +1,37 @@
-// Simplified bus data (only timings)
+// Bus data with timings
 const busData = {
     "Arivilanjapoyil": {
         "Kannur": ["05:30", "07:15", "09:45", "12:30", "15:15", "18:00", "20:45"],
         "Taliparamba": ["06:00", "08:30", "11:00", "14:00", "16:30", "19:00"]
     },
-    "Udayagiri": {
-        "Kannur": ["05:45", "08:00", "10:30", "13:15", "16:00", "18:45", "21:30"],
-        "Alakode": ["06:30", "09:15", "12:00", "15:00", "17:45", "20:30"]
-    },
     // ... (keep all your existing bus data)
 };
 
-// Get current time in HH:MM format (24-hour)
-function getCurrentTime() {
+// Get current time in minutes since midnight
+function getCurrentMinutes() {
     const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    return `${hours}:${minutes}`;
+    return now.getHours() * 60 + now.getMinutes();
 }
 
-// Compare two times in "HH:MM" format (24-hour)
-function isTimePast(busTime, currentTime) {
-    const [busH, busM] = busTime.split(':').map(Number);
-    const [currH, currM] = currentTime.split(':').map(Number);
-    
-    if (busH < currH) return true;
-    if (busH === currH && busM < currM) return true;
-    return false;
+// Convert HH:MM to minutes since midnight
+function timeToMinutes(time) {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
 }
 
 document.getElementById('search-btn').addEventListener('click', function() {
     const from = document.getElementById('from').value;
     const to = document.getElementById('to').value;
-    const currentTime = getCurrentTime();
+    const currentMinutes = getCurrentMinutes();
     
     if (!from) {
         document.getElementById('results').innerHTML = '<p>Please select departure location</p>';
         return;
     }
     
+    // Format current time for display
+    const now = new Date();
+    const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
     let resultsHTML = `<div class="current-time">Current time: ${formatDisplayTime(currentTime)}</div>`;
     
     if (to) {
@@ -47,8 +40,9 @@ document.getElementById('search-btn').addEventListener('click', function() {
             resultsHTML += `<div class="route-title">${from} to ${to}</div>`;
             resultsHTML += busData[from][to]
                 .map(time => {
-                    const past = isTimePast(time, currentTime);
-                    return `<span class="timing ${past ? 'past' : 'upcoming'}">${time}</span>`;
+                    const busMinutes = timeToMinutes(time);
+                    const isPast = busMinutes < currentMinutes;
+                    return `<span class="timing ${isPast ? 'past' : 'upcoming'}">${time}</span>`;
                 })
                 .join('');
         } else {
@@ -61,8 +55,9 @@ document.getElementById('search-btn').addEventListener('click', function() {
                 resultsHTML += `<div class="route-title">${from} to ${destination}</div>`;
                 resultsHTML += busData[from][destination]
                     .map(time => {
-                        const past = isTimePast(time, currentTime);
-                        return `<span class="timing ${past ? 'past' : 'upcoming'}">${time}</span>`;
+                        const busMinutes = timeToMinutes(time);
+                        const isPast = busMinutes < currentMinutes;
+                        return `<span class="timing ${isPast ? 'past' : 'upcoming'}">${time}</span>`;
                     })
                     .join('');
             }
@@ -74,7 +69,7 @@ document.getElementById('search-btn').addEventListener('click', function() {
     document.getElementById('results').innerHTML = resultsHTML || '<p>No timings available</p>';
 });
 
-// Format time for display (convert 24-hour to 12-hour with AM/PM)
+// Format time for display (12-hour with AM/PM)
 function formatDisplayTime(time) {
     const [hours, minutes] = time.split(':').map(Number);
     const period = hours >= 12 ? 'PM' : 'AM';
@@ -82,8 +77,7 @@ function formatDisplayTime(time) {
     return `${displayHours}:${String(minutes).padStart(2, '0')} ${period}`;
 }
 
-// Initialize with current time
+// Initialize on page load
 window.onload = function() {
-    const currentTime = getCurrentTime();
-    document.getElementById('search-time').value = currentTime;
+    document.getElementById('search-btn').click(); // Auto-search with current time
 };
