@@ -83,9 +83,20 @@ button:hover {
     border-bottom: 1px solid #eee;
 }
 
+
 .current-time {
     text-align: center;
     margin-bottom: 15px;
-    font-weight: 500;
-    color: #3498db;
+    font-weight: bold;
+    color: #333;
+}
+
+.past {
+    background-color: #ffcdd2;
+    color: #c62828;
+}
+
+.upcoming {
+    background-color: #c8e6c9;
+    color: #2e7d32;
 }
