@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kannur Bus Timings</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <h1>Kannur Bus Timings</h1>
         
-        <div class="search-box">
+        <div class="controls">
             <select id="from">
                 <option value="">From...</option>
                 <option>Arivilanjapoyil</option>
@@ -34,9 +33,10 @@
                 <option>Kannur</option>
             </select>
             
-            <input type="time" id="search-time" value="">
-            <button id="search-btn">Show Timings</button>
+            <button id="search">Show Timings</button>
         </div>
+        
+        <div class="current-time">Current Time: <span id="time-display"></span></div>
         
         <div id="results">
             <p>Select locations to see bus timings</p>
