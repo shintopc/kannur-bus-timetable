@@ -29,3 +29,23 @@ A Progressive Web App (PWA) to search for bus schedules between towns in Kannur 
    ```bash
    git clone https://github.com/your-username/kannur-bus-app.git
    cd kannur-bus-app
+   
+ 📦 PWA Capabilities
+Add to Home Screen on Android/iOS
+
+Offline support via Service Worker
+
+Responsive icons via Web App Manifest
+
+📸 Screenshots
+Add your screenshots here
+
+📃 License
+This project is licensed under the MIT License.
+
+🚧 TODO
+ Add admin panel to manage routes
+
+ Fetch live data from backend
+
+ Add map integration (Google Maps)
