@@ -83,17 +83,6 @@ button:hover {
     border-bottom: 1px solid #eee;
 }
 
-
-.past {
-    background-color: #ffebee;
-    color: #c62828;
-}
-
-.upcoming {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-}
-
 .current-time {
     font-weight: bold;
     margin-bottom: 15px;
