@@ -30,71 +30,115 @@ const busData = {
     }
 };
 
-// Update current time display
-function updateCurrentTime() {
+// Update clock display
+function updateClock() {
     const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
+    let hours = now.getHours();
     const minutes = String(now.getMinutes()).padStart(2, '0');
-    document.getElementById('time-display').textContent = `${hours}:${minutes}`;
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    
+    document.getElementById('time').textContent = `${hours}:${minutes}`;
+    document.getElementById('ampm').textContent = ampm;
+    
+    return `${String(now.getHours()).padStart(2, '0')}:${minutes}`;
 }
 
 // Compare two times in "HH:MM" format
-function isPast(busTime, currentTime) {
-    const [busH, busM] = busTime.split(':').map(Number);
-    const [currentH, currentM] = currentTime.split(':').map(Number);
+function compareTimes(time1, time2) {
+    const [h1, m1] = time1.split(':').map(Number);
+    const [h2, m2] = time2.split(':').map(Number);
     
-    if (busH < currentH) return true;
-    if (busH === currentH && busM < currentM) return true;
-    return false;
+    if (h1 !== h2) return h1 - h2;
+    return m1 - m2;
 }
 
 // Display results
 function showResults() {
     const from = document.getElementById('from').value;
     const to = document.getElementById('to').value;
-    const currentTime = document.getElementById('time-display').textContent;
+    const currentTime = updateClock();
     const resultsDiv = document.getElementById('results');
     
     if (!from) {
-        resultsDiv.innerHTML = '<p>Please select departure location</p>';
+        resultsDiv.innerHTML = `
+            <div class="welcome-message">
+                <i class="fas fa-compass"></i>
+                <p>Please select departure location</p>
+            </div>`;
         return;
     }
     
     let html = '';
+    let foundNextBus = false;
     
     if (to) {
         // Show specific route
         if (busData[from] && busData[from][to]) {
-            html += `<div class="route">
-                <div class="route-title">${from} to ${to}</div>
+            html += `
+            <div class="route">
+                <div class="route-title">
+                    <i class="fas fa-route"></i>
+                    ${from} to ${to}
+                </div>
                 <div class="timings">`;
             
             busData[from][to].forEach(time => {
-                const past = isPast(time, currentTime);
-                html += `<span class="time ${past ? 'past' : 'upcoming'}">${time}</span>`;
+                const comparison = compareTimes(time, currentTime);
+                const isPast = comparison < 0;
+                const isNext = !foundNextBus && comparison >= 0;
+                
+                if (isNext) foundNextBus = true;
+                
+                html += `
+                <div class="time-slot ${isPast ? 'past' : isNext ? 'upcoming next' : 'upcoming'}">
+                    ${time}
+                    ${isNext ? '<i class="fas fa-arrow-right"></i>' : ''}
+                </div>`;
             });
             
             html += `</div></div>`;
         } else {
-            html = `<p>No buses found from ${from} to ${to}</p>`;
+            html = `
+            <div class="welcome-message">
+                <i class="fas fa-exclamation-circle"></i>
+                <p>No buses found from ${from} to ${to}</p>
+            </div>`;
         }
     } else {
         // Show all routes
         if (busData[from]) {
             for (const destination in busData[from]) {
-                html += `<div class="route">
-                    <div class="route-title">${from} to ${destination}</div>
+                html += `
+                <div class="route">
+                    <div class="route-title">
+                        <i class="fas fa-route"></i>
+                        ${from} to ${destination}
+                    </div>
                     <div class="timings">`;
                 
                 busData[from][destination].forEach(time => {
-                    const past = isPast(time, currentTime);
-                    html += `<span class="time ${past ? 'past' : 'upcoming'}">${time}</span>`;
+                    const comparison = compareTimes(time, currentTime);
+                    const isPast = comparison < 0;
+                    const isNext = !foundNextBus && comparison >= 0;
+                    
+                    if (isNext) foundNextBus = true;
+                    
+                    html += `
+                    <div class="time-slot ${isPast ? 'past' : isNext ? 'upcoming next' : 'upcoming'}">
+                        ${time}
+                        ${isNext ? '<i class="fas fa-arrow-right"></i>' : ''}
+                    </div>`;
                 });
                 
                 html += `</div></div>`;
             }
         } else {
-            html = `<p>No buses found from ${from}</p>`;
+            html = `
+            <div class="welcome-message">
+                <i class="fas fa-exclamation-circle"></i>
+                <p>No buses found from ${from}</p>
+            </div>`;
         }
     }
     
@@ -104,9 +148,9 @@ function showResults() {
 // Initialize
 document.getElementById('search').addEventListener('click', showResults);
 
-// Update time every second
-updateCurrentTime();
-setInterval(updateCurrentTime, 1000);
+// Update clock every second
+updateClock();
+setInterval(updateClock, 1000);
 
 // Initial search
 showResults();
