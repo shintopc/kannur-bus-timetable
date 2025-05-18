@@ -33,33 +33,80 @@ const busData = {
 document.getElementById('search-btn').addEventListener('click', function() {
     const from = document.getElementById('from').value;
     const to = document.getElementById('to').value;
+    let searchTime = document.getElementById('search-time').value;
+    
+    // If no time selected, use current time
+    if (!searchTime) {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        searchTime = `${hours}:${minutes}`;
+    } else {
+        // Convert HH:MM to 24-hour format
+        searchTime = searchTime.substring(0, 5);
+    }
     
     if (!from) {
         document.getElementById('results').innerHTML = '<p>Please select departure location</p>';
         return;
     }
     
-    let resultsHTML = '';
+    let resultsHTML = `<div class="current-time">Showing buses relative to: ${formatTimeForDisplay(searchTime)}</div>`;
     
     if (to) {
         // Show specific route
         if (busData[from] && busData[from][to]) {
-            resultsHTML = `<div class="route-title">${from} to ${to}</div>`;
-            resultsHTML += busData[from][to].map(time => `<span class="timing">${time}</span>`).join('');
+            resultsHTML += `<div class="route-title">${from} to ${to}</div>`;
+            resultsHTML += busData[from][to]
+                .map(time => createTimingElement(time, searchTime))
+                .join('');
         } else {
-            resultsHTML = `<p>No buses found from ${from} to ${to}</p>`;
+            resultsHTML += `<p>No buses found from ${from} to ${to}</p>`;
         }
     } else {
         // Show all routes from selected location
         if (busData[from]) {
             for (const destination in busData[from]) {
                 resultsHTML += `<div class="route-title">${from} to ${destination}</div>`;
-                resultsHTML += busData[from][destination].map(time => `<span class="timing">${time}</span>`).join('');
+                resultsHTML += busData[from][destination]
+                    .map(time => createTimingElement(time, searchTime))
+                    .join('');
             }
         } else {
-            resultsHTML = `<p>No buses found from ${from}</p>`;
+            resultsHTML += `<p>No buses found from ${from}</p>`;
         }
     }
     
     document.getElementById('results').innerHTML = resultsHTML || '<p>No timings available</p>';
 });
+
+function createTimingElement(time, searchTime) {
+    const isPast = compareTimes(time, searchTime) < 0;
+    const className = isPast ? 'past' : 'upcoming';
+    return `<span class="timing ${className}">${time}</span>`;
+}
+
+// Compare two times in "HH:MM" format
+function compareTimes(time1, time2) {
+    const [h1, m1] = time1.split(':').map(Number);
+    const [h2, m2] = time2.split(':').map(Number);
+    
+    if (h1 !== h2) return h1 - h2;
+    return m1 - m2;
+}
+
+// Format time for display (convert 24-hour to 12-hour with AM/PM)
+function formatTimeForDisplay(time) {
+    const [hours, minutes] = time.split(':').map(Number);
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12;
+    return `${displayHours}:${String(minutes).padStart(2, '0')} ${period}`;
+}
+
+// Set default time to current time
+window.onload = function() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('search-time').value = `${hours}:${minutes}`;
+};
