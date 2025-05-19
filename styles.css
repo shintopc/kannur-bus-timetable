@@ -51,14 +51,15 @@ header p {
 
 .search-panel {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     padding: 20px;
     background: var(--light);
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .search-box {
-    flex: 1;
+    flex: 1 1 200px;
     min-width: 200px;
     display: flex;
     align-items: center;
@@ -83,11 +84,31 @@ select {
     outline: none;
 }
 
+.swap-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.swap-btn:hover {
+    background: var(--secondary);
+    transform: rotate(180deg) scale(1.1);
+}
+
 button {
     background: var(--accent);
     color: white;
     border: none;
-    padding: 0 25px;
+    padding: 12px;
     border-radius: 10px;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -95,6 +116,7 @@ button {
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     transition: all 0.3s ease;
 }
@@ -102,6 +124,11 @@ button {
 button:hover {
     background: #d91a6a;
     transform: translateY(-2px);
+}
+
+#search {
+    flex: 1 1 100%;
+    min-width: 100%;
 }
 
 .time-display {
@@ -211,28 +238,6 @@ button:hover {
     100% { transform: scale(1); }
 }
 
-@media (max-width: 600px) {
-    header {
-        padding: 20px;
-    }
-    
-    header h1 {
-        font-size: 1.8rem;
-    }
-    
-    .search-panel {
-        flex-direction: column;
-    }
-    
-    button {
-        justify-content: center;
-        padding: 12px;
-    }
-}
-
-
-/* ... (previous styles remain the same) ... */
-
 /* Footer Styles */
 footer {
     background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
@@ -331,7 +336,33 @@ footer {
     font-size: 0.9rem;
 }
 
-/* Responsive Footer */
+/* PWA Install Button */
+#install-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+    40% {transform: translateY(-10px);}
+    60% {transform: translateY(-5px);}
+}
+
+/* Responsive Styles */
 @media (max-width: 768px) {
     .footer-content {
         flex-direction: column;
@@ -346,73 +377,37 @@ footer {
     }
 }
 
-/* Add this to your existing media queries */
 @media (max-width: 600px) {
+    header {
+        padding: 20px;
+    }
+    
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .search-panel {
+        flex-direction: column;
+    }
+    
+    .search-box {
+        width: 100%;
+        min-width: 100%;
+    }
+    
+    .swap-btn {
+        transform: rotate(90deg);
+        margin: 10px 0;
+    }
+    
+    #search {
+        min-width: 100%;
+    }
+    
     .signature {
         font-size: 1.5rem;
     }
 }
-
-
-/* PWA Install Button */
-#install-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-  40% {transform: translateY(-10px);}
-  60% {transform: translateY(-5px);}
-}
-
-/* Splash Screen for iOS */
-@media all and (display-mode: standalone) {
-  body {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-  }
-  
-  .splash-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-  }
-  
-  .splash-screen img {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 20px;
-    animation: pulse 1.5s infinite;
-  }
-  
-  .splash-screen h2 {
-    color: white;
-    margin-bottom: 10px;
-  }
-}
-
 
 /* Offline Page */
 .offline {
@@ -450,77 +445,4 @@ footer {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-}
-/* Add this to your existing styles.css */
-.swap-btn {
-    background: var(--primary);
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    align-self: center;
-    transition: all 0.3s ease;
-}
-
-.swap-btn:hover {
-    background: var(--secondary);
-    transform: rotate(180deg) scale(1.1);
-}
-
-/* Adjust the search-panel layout to accommodate the swap button */
-.search-panel {
-    display: flex;
-    gap: 10px;
-    padding: 20px;
-    background: var(--light);
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-.search-box {
-    flex: 1;
-    min-width: 200px;
-}
-/* Add to styles.css */
-.update-dialog {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-  z-index: 1000;
-  max-width: 90%;
-  animation: slideUp 0.3s ease;
-}
-
-.update-content {
-  text-align: center;
-}
-
-.update-content h3 {
-  color: var(--secondary);
-  margin-bottom: 10px;
-}
-
-#refresh-btn {
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 5px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-
-@keyframes slideUp {
-  from { bottom: -100px; }
-  to { bottom: 20px; }
 }
