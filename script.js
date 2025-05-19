@@ -158,5 +158,21 @@ setInterval(updateClock, 1000);
 showResults();
 
 
+// Add this to your existing script.js
+document.getElementById('swap').addEventListener('click', function() {
+    const fromSelect = document.getElementById('from');
+    const toSelect = document.getElementById('to');
+    const tempValue = fromSelect.value;
+    
+    fromSelect.value = toSelect.value;
+    toSelect.value = tempValue;
+    
+    // Trigger search if both fields have values
+    if (fromSelect.value && toSelect.value) {
+        showResults();
+    }
+});
+
+
 
 
