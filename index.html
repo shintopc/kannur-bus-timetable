@@ -9,19 +9,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <!-- PWA Meta Tags -->
-<meta name="theme-color" content="#3a0ca3">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="manifest.json">
-
-<!-- iOS Icons -->
-<link rel="apple-touch-icon" href="icons/icon-152x152.png">
-
+    <meta name="theme-color" content="#3a0ca3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+    <!-- iOS Icons -->
+    <link rel="apple-touch-icon" href="icons/icon-152x152.png">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-bus"></i>  Bus Timings</h1>
+            <h1><i class="fas fa-bus"></i> Bus Timings</h1>
             <p>Find colorful bus schedules across Kannur district</p>
         </header>
         
@@ -39,12 +37,10 @@
                     <option>Kannur</option>
                 </select>
             </div>
-
-
-                <!-- Add this swap button -->
-    <button id="swap" class="swap-btn" title="Swap locations">
-        <i class="fas fa-exchange-alt"></i>
-    </button>
+            
+            <button id="swap" class="swap-btn" title="Swap locations">
+                <i class="fas fa-exchange-alt"></i>
+            </button>
             
             <div class="search-box">
                 <i class="fas fa-flag-checkered"></i>
@@ -79,12 +75,13 @@
                 <p>Select your route to see colorful bus timings</p>
             </div>
         </div>
-<footer>
+
+        <footer>
             <div class="footer-content">
                 <div class="footer-left">
                     <div class="logo">
                         <i class="fas fa-bus"></i>
-                        <span> Bus Timings</span>
+                        <span>Bus Timings</span>
                     </div>
                     <p>Your reliable bus timing companion</p>
                 </div>
@@ -94,80 +91,59 @@
                         <div class="signature">Shinto PC</div>
                     </div>
                     <div class="social-links">
-<a href="https://www.facebook.com/shintopc"><i class="fab fa-facebook-f"></i></a>
-<a href="https://wa.me/919419927293"><i class="fab fa-whatsapp"></i></a>
-<a href="https://www.instagram.com/shinto_pc/"><i class="fab fa-instagram"></i></a>
-
+                        <a href="https://www.facebook.com/shintopc"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://wa.me/919419927293"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.instagram.com/shinto_pc/"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025  Bus Timings. All rights reserved.</p>
+                <p>&copy; 2025 Bus Timings. All rights reserved.</p>
             </div>
         </footer>
-
-        
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
 
-<script>
-  // Register service worker
-// Replace your existing service worker registration with this:
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(registration => {
-        console.log('ServiceWorker registration successful');
-        
-        // Check for updates on page load
-        registration.update();
-        
-        // Track the installing worker
-        registration.addEventListener('updatefound', () => {
-          const newWorker = registration.installing;
-          
-          newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              showUpdateUI(registration);
-            }
-          });
+        // Show install prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallButton();
         });
-      })
-      .catch(err => {
-        console.log('ServiceWorker registration failed: ', err);
-      });
-  });
-}
 
-  // Show install prompt
-  let deferredPrompt;
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    showInstallButton();
-  });
+        function showInstallButton() {
+            const installButton = document.createElement('button');
+            installButton.id = 'install-btn';
+            installButton.innerHTML = '<i class="fas fa-download"></i> Install App';
+            installButton.addEventListener('click', installApp);
+            document.body.appendChild(installButton);
+        }
 
-  function showInstallButton() {
-    const installButton = document.createElement('button');
-    installButton.id = 'install-btn';
-    installButton.innerHTML = '<i class="fas fa-download"></i> Install App';
-    installButton.addEventListener('click', installApp);
-    document.body.appendChild(installButton);
-  }
-
-  function installApp() {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted install');
-      }
-      deferredPrompt = null;
-      document.getElementById('install-btn').remove();
-    });
-  }
-</script>
-
-
+        function installApp() {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted install');
+                }
+                deferredPrompt = null;
+                document.getElementById('install-btn').remove();
+            });
+        }
+    </script>
 </body>
 </html>
