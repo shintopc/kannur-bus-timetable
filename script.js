@@ -173,6 +173,45 @@ document.getElementById('swap').addEventListener('click', function() {
     }
 });
 
+// Add this at the bottom of your script.js
+if ('serviceWorker' in navigator) {
+  let refreshing;
+  
+  // Detect when new service worker is waiting
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing) return;
+    refreshing = true;
+    window.location.reload();
+  });
+
+  // Check for updates periodically
+  setInterval(() => {
+    navigator.serviceWorker.ready.then(registration => {
+      registration.update().then(() => {
+        console.log('Checked for updates');
+      });
+    });
+  }, 60 * 60 * 1000); // Check every hour
+}
+
+// Add this function to prompt user about updates
+function showUpdateUI(registration) {
+  const updateDialog = document.createElement('div');
+  updateDialog.className = 'update-dialog';
+  updateDialog.innerHTML = `
+    <div class="update-content">
+      <h3>Update Available</h3>
+      <p>A new version of the app is available. Refresh to update?</p>
+      <button id="refresh-btn">Refresh Now</button>
+    </div>
+  `;
+  document.body.appendChild(updateDialog);
+  
+  document.getElementById('refresh-btn').addEventListener('click', () => {
+    registration.waiting.postMessage({action: 'skipWaiting'});
+  });
+}
+
 
 
 
