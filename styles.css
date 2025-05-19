@@ -388,20 +388,40 @@ footer {
     
     .search-panel {
         flex-direction: column;
+        background: white;
+        padding: 12px;
+        gap: 8px;
     }
     
     .search-box {
-        width: 100%;
-        min-width: 100%;
+        width: calc(100% - 24px);
+        margin: 0 12px 4px 12px;
+        padding: 8px 12px;
+        height: 48px;
+        border: 1px solid #e0e0e0;
+    }
+    
+    select {
+        font-size: 0.95rem;
+        padding: 4px 0;
+    }
+    
+    .search-box i {
+        font-size: 1rem;
     }
     
     .swap-btn {
         transform: rotate(90deg);
-        margin: 10px 0;
+        width: 36px;
+        height: 36px;
+        margin: 5px auto;
     }
     
     #search {
-        min-width: 100%;
+        min-width: calc(100% - 24px);
+        height: 48px;
+        margin: 4px 12px;
+        font-size: 0.95rem;
     }
     
     .signature {
