@@ -451,3 +451,38 @@ footer {
     align-items: center;
     gap: 10px;
 }
+/* Add this to your existing styles.css */
+.swap-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    align-self: center;
+    transition: all 0.3s ease;
+}
+
+.swap-btn:hover {
+    background: var(--secondary);
+    transform: rotate(180deg) scale(1.1);
+}
+
+/* Adjust the search-panel layout to accommodate the swap button */
+.search-panel {
+    display: flex;
+    gap: 10px;
+    padding: 20px;
+    background: var(--light);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 200px;
+}
