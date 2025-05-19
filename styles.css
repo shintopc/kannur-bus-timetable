@@ -486,3 +486,41 @@ footer {
     flex: 1;
     min-width: 200px;
 }
+/* Add to styles.css */
+.update-dialog {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  z-index: 1000;
+  max-width: 90%;
+  animation: slideUp 0.3s ease;
+}
+
+.update-content {
+  text-align: center;
+}
+
+.update-content h3 {
+  color: var(--secondary);
+  margin-bottom: 10px;
+}
+
+#refresh-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+@keyframes slideUp {
+  from { bottom: -100px; }
+  to { bottom: 20px; }
+}
