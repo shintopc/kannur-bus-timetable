@@ -1,132 +1,92 @@
-const CACHE_NAME = 'kannur-bus-' + Date.now(); // Unique cache per deployment
-const PRECACHE = [
+// sw.js
+// Auto-generated version based on date (YYYYMMDD)
+const CACHE_NAME = `kannur-bus-${new Date().toISOString().slice(0,10).replace(/-/g,'')}`;
+
+const urlsToCache = [
   '/',
   '/index.html',
   '/styles.css',
   '/script.js',
   '/bus-data.js',
   '/offline.html',
+  '/manifest.json',
+  // Add paths to your icons here
+  '/icons/icon-72x72.png',
+  '/icons/icon-96x96.png',
+  '/icons/icon-128x128.png',
+  '/icons/icon-144x144.png',
+  '/icons/icon-152x152.png',
   '/icons/icon-192x192.png',
+  '/icons/icon-384x384.png',
   '/icons/icon-512x512.png'
 ];
 
-// Dynamic content that should be updated frequently
-const DYNAMIC_CACHE = 'dynamic-' + CACHE_NAME;
-const MAX_DYNAMIC_ITEMS = 50; // Prevent cache growing too large
-
-// Install - Precaches essential resources
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(PRECACHE))
-      .then(() => self.skipWaiting()) // Activate immediately
+      .then(cache => {
+        console.log('Opened cache');
+        return cache.addAll(urlsToCache);
+      })
   );
 });
 
-// Activate - Clean up old caches
-self.addEventListener('activate', event => {
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(keys => {
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        keys.map(key => {
-          if (key !== CACHE_NAME && !key.includes(DYNAMIC_CACHE)) {
-            return caches.delete(key);
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            console.log('Deleting old cache:', cacheName);
+            return caches.delete(cacheName);
           }
         })
       );
-    }).then(() => self.clients.claim()) // Control all open pages
+    })
   );
 });
 
-// Fetch - Smart caching strategy
-self.addEventListener('fetch', event => {
-  // Skip non-GET requests and chrome-extension
-  if (event.request.method !== 'GET' || event.request.url.startsWith('chrome-extension://')) {
-    return;
-  }
-
-  // Network first for HTML (with fallback)
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request)
-        .then(networkResponse => {
-          // Update cache with fresh response
-          const clonedResponse = networkResponse.clone();
-          caches.open(DYNAMIC_CACHE)
-            .then(cache => cache.put(event.request, clonedResponse));
-          return networkResponse;
-        })
-        .catch(() => caches.match('/offline.html'))
-    );
-    return;
-  }
-
-  // Cache first for static assets
-  if (PRECACHE.some(url => event.request.url.includes(url.split('/').pop()))) {
-    event.respondWith(
-      caches.match(event.request)
-        .then(cached => cached || fetch(event.request))
-    );
-    return;
-  }
-
-  // Dynamic content: stale-while-revalidate
+self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      const fetchPromise = fetch(event.request).then(networkResponse => {
-        // Update cache in background
-        caches.open(DYNAMIC_CACHE).then(cache => {
-          cache.put(event.request, networkResponse.clone());
-          // Clean up if cache gets too big
-          cache.keys().then(keys => {
-            if (keys.length > MAX_DYNAMIC_ITEMS) {
-              cache.delete(keys[0]);
+    caches.match(event.request)
+      .then(response => {
+        // Cache hit - return response
+        if (response) {
+          return response;
+        }
+        
+        // Clone the request
+        const fetchRequest = event.request.clone();
+        
+        return fetch(fetchRequest).then(
+          response => {
+            // Check if we received a valid response
+            if(!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
             }
-          });
+            
+            // Clone the response
+            const responseToCache = response.clone();
+            
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
+              
+            return response;
+          }
+        ).catch(() => {
+          // If fetch fails, show offline page for HTML requests
+          if (event.request.headers.get('accept').includes('text/html')) {
+            return caches.match('/offline.html');
+          }
         });
-        return networkResponse;
-      }).catch(() => {}); // Silent fail if network fails
-
-      return cachedResponse || fetchPromise;
-    })
-  );
-});
-
-// Background sync for critical updates
-self.addEventListener('sync', event => {
-  if (event.tag === 'update-content') {
-    event.waitUntil(
-      caches.open(CACHE_NAME).then(cache => {
-        return Promise.all(
-          PRECACHE.map(url => fetch(url)
-            .then(response => cache.put(url, response))
-            .catch(() => {}))
-        );
       })
-    );
+  );
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data.action === 'skipWaiting') {
+    self.skipWaiting();
   }
-});
-
-// Push notifications for updates
-self.addEventListener('push', event => {
-  const data = event.data.json();
-  event.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.body,
-      icon: '/icons/icon-192x192.png'
-    })
-  );
-});
-
-// Notification click handler
-self.addEventListener('notificationclick', event => {
-  event.notification.close();
-  event.waitUntil(
-    clients.matchAll({type: 'window'}).then(clientList => {
-      if (clientList.length > 0) {
-        return clientList[0].focus();
-      }
-      return clients.openWindow('/');
-    })
-  );
 });
