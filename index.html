@@ -145,5 +145,65 @@
             });
         }
     </script>
+
+
+
+
+
+    <script>
+    // Register service worker with version check
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(registration => {
+                    console.log('ServiceWorker registration successful');
+                    
+                    // Check for updates periodically
+                    setInterval(() => {
+                        registration.update().then(() => {
+                            console.log('Checked for service worker update');
+                        });
+                    }, 60 * 60 * 1000); // Check every hour
+                    
+                    // Track updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // New update available
+                                showUpdateUI(registration);
+                            }
+                        });
+                    });
+                })
+                .catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+        });
+    }
+
+    function showUpdateUI(registration) {
+        const updateDialog = document.createElement('div');
+        updateDialog.className = 'update-dialog';
+        updateDialog.innerHTML = `
+            <div class="update-content">
+                <h3>🚌 Update Available</h3>
+                <p>A new version of Bus Timings is available. Refresh to get the latest schedules.</p>
+                <button id="refresh-btn">Refresh Now</button>
+                <button id="close-btn">Later</button>
+            </div>
+        `;
+        document.body.appendChild(updateDialog);
+        
+        document.getElementById('refresh-btn').addEventListener('click', () => {
+            registration.waiting.postMessage({action: 'skipWaiting'});
+            updateDialog.remove();
+        });
+        
+        document.getElementById('close-btn').addEventListener('click', () => {
+            updateDialog.remove();
+        });
+    }
+</script>
 </body>
 </html>
