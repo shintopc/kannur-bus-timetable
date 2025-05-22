@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Bus Timings</title>
+    <link rel="stylesheet" href="admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header>
+            <h1><i class="fas fa-bus"></i> Bus Timings Admin Panel</h1>
+            <p>Manage all bus routes and schedules</p>
+        </header>
+
+        <div class="admin-controls">
+            <div class="route-form">
+                <h2><i class="fas fa-plus-circle"></i> Add/Edit Route</h2>
+                <div class="form-group">
+                    <label for="admin-from">From:</label>
+                    <select id="admin-from" class="admin-select">
+                        <option value="">Select departure</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="admin-to">To:</label>
+                    <select id="admin-to" class="admin-select">
+                        <option value="">Select destination</option>
+                    </select>
+                    <span class="or-text">or</span>
+                    <input type="text" id="admin-to-new" class="admin-input" placeholder="New destination">
+                </div>
+                <div class="form-group">
+                    <label for="admin-time">Time (HH:MM):</label>
+                    <input type="text" id="admin-time" class="admin-input" placeholder="e.g. 08:30">
+                    <button id="add-time" class="admin-btn"><i class="fas fa-plus"></i> Add Time</button>
+                </div>
+                <div class="time-list-container">
+                    <h3>Current Times for <span id="current-route">[select route]</span></h3>
+                    <ul id="time-list" class="time-list"></ul>
+                </div>
+                <div class="form-actions">
+                    <button id="save-route" class="admin-btn primary"><i class="fas fa-save"></i> Save Route</button>
+                    <button id="delete-route" class="admin-btn danger"><i class="fas fa-trash"></i> Delete Route</button>
+                </div>
+            </div>
+
+            <div class="all-routes">
+                <h2><i class="fas fa-list"></i> All Routes</h2>
+                <div id="routes-list" class="routes-list"></div>
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Main App</a>
+        </div>
+    </div>
+
+    <script src="bus-data.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
