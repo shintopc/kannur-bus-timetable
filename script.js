@@ -1,37 +1,33 @@
-// Bus data with timings in 24-hour format
-const busData = {
-    "Arivilanjapoyil": {
-        "Kannur": ["05:25", "06:00", "07:00", "07:25", "07:40", "08:10", "08:55", "09:50", "11:15", "12:30", "13:05", "14:50", "16:10", "17:00", "18:20"],
-        "Sreekandapuram": ["10:25", "02:20", "03:15"],
-        "Jayagiri": ["08:00", "12:00", "03:15"],
-        "Josgiri": ["07:20", "15:30"],
-    },
-    "Udayagiri": {
-        "Kannur": ["05:45", "08:00", "10:30", "13:15", "16:00", "18:45", "21:30"],
-        "Alakode": ["06:30", "09:15", "12:00", "15:00", "17:45", "20:30"]
-    },
-    "Karthikapurm": {
-        "Kannur": ["06:15", "08:45", "11:30", "14:15", "17:00", "19:45"],
-        "Cherupuzha": ["07:00", "10:00", "13:00", "16:00", "19:00"]
-    },
-    "Cherupuzha": {
-        "Kannur": ["05:15", "07:45", "10:15", "13:00", "15:45", "18:30", "21:15"],
-        "Taliparamba": ["06:45", "09:30", "12:15", "15:15", "18:00", "20:45"]
-    },
-    "Alakode": {
-        "Kannur": ["05:00", "07:30", "10:00", "12:45", "15:30", "18:15", "21:00"],
-        "Udayagiri": ["06:15", "09:00", "11:45", "14:45", "17:30", "20:15"]
-    },
-    "Taliparamba": {
-        "Kannur": ["05:45", "08:15", "10:45", "13:30", "16:15", "19:00", "21:45"],
-        "Arivilanjapoyil": ["06:30", "09:15", "12:00", "15:00", "17:45", "20:30"]
-    },
-    "Kannur": {
-        "Arivilanjapoyil": ["06:00", "08:30", "11:00", "13:45", "16:30", "19:15", "22:00"],
-        "Udayagiri": ["05:30", "08:00", "10:30", "13:15", "16:00", "18:45", "21:30"]
-    }
-};
+// Remove the busData constant from script.js
+// Just use window.busData directly in your code
 
+document.getElementById('search-btn').addEventListener('click', function() {
+    const from = document.getElementById('from').value;
+    const to = document.getElementById('to').value;
+    const currentTime = updateClock();
+    
+    if (!from) {
+        document.getElementById('results').innerHTML = '<p>Please select departure location</p>';
+        return;
+    }
+    
+    let html = '';
+    
+    // Use window.busData instead of busData
+    if (to) {
+        if (window.busData[from] && window.busData[from][to]) {
+            // ... rest of your existing code
+        }
+    } else {
+        if (window.busData[from]) {
+            for (const destination in window.busData[from]) {
+                // ... rest of your existing code
+            }
+        }
+    }
+    
+    document.getElementById('results').innerHTML = html;
+});
 // Update clock display
 function updateClock() {
     const now = new Date();
