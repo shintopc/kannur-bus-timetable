@@ -551,3 +551,58 @@ footer {
     align-items: center;
     gap: 8px;
 }
+
+
+
+
+.update-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.update-content {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+}
+
+.update-content h3 {
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.update-content p {
+    margin-bottom: 20px;
+    color: var(--dark);
+}
+
+.update-content button {
+    margin: 5px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#refresh-btn {
+    background: var(--accent);
+    color: white;
+}
+
+#close-btn {
+    background: #e0e0e0;
+    color: var(--dark);
+}
